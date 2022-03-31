@@ -149,7 +149,10 @@ def generate_save_transcript_csv(transcript):
     result = temp_data[column_list]
     
     if not os.path.isdir(args.out_dir):
-        os.makedirs(args.out_dir)
+        try:
+            os.makedirs(args.out_dir)
+        except OSError:
+            pass
 
     if 'TPM' in args.rnaseq_csv:
         out_file = os.path.join(args.out_dir, '_'.join([transcript, 'tpm_spectra.csv']))
