@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 """
-Author : eg
+Author : Emmanuel Gonzalez
 Date   : 2022-03-30
-Purpose: Rock the Casbah
+Purpose: RNA-Seq & Spectral preprocessing
 """
 
 import argparse
 import os
 import sys
-from this import d
 import pandas as pd
 import multiprocessing
 import warnings
