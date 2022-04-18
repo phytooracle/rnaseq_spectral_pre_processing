@@ -1,4 +1,4 @@
-# RNA-Seq & Hyperspectral Pre-processing
+# <p align="center">RNA-Seq & Hyperspectral Pre-processing</p>
 
 ## Purpose
 This script (i) adds fieldbook data to RNA-Seq and hyperspectral input files, (ii) combines RNA-Seq and hyperspectral data, and (iii) saves the joined RNA-Seq and hyperspectral CSV file to disk for each transcript.
