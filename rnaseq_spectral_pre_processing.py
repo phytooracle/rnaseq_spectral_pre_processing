@@ -55,6 +55,16 @@ def get_args():
 
 # --------------------------------------------------
 def get_rnaseq_data(csv_path, fb_path):
+    '''
+    Reads the RNA-Seq file and adds fieldbook data to it using the join function within Pandas.
+
+    Input:
+        - csv_path: path to CSV file containing RNA-Seq data
+        - fb_path: path to CSV file containing fieldbook information
+    Output: 
+        - rna_fb: Dataframe containing RNA-Seq and fieldbook information
+    '''
+
     fb = get_fieldbook_data(csv_path=fb_path, index='entry')
     rna_df = pd.read_csv(csv_path)
     rna_df['Gene'] = rna_df['Gene'].str.replace('Gohir.', 'Gh_')
@@ -74,6 +84,18 @@ def get_rnaseq_data(csv_path, fb_path):
 
 # --------------------------------------------------
 def get_spectral_data(csv_path, fb_path):
+    '''
+    Reads hyperspectral file and adds fieldbook data to it using the join function within Pandas.
+
+    Input: 
+        - csv_path: path to CSV file containing hyperspectral data
+        - fb_path: path to CSV file containing fieldbook information
+    Output: 
+        - spectra_df: Dataframe containing only hyperspectral data
+        - spectra_fb: Dataframe containing both hyperspectral and fieldbook information
+        - fb: Dataframe containing only fieldbook data
+    '''
+
     fb = get_fieldbook_data(csv_path=fb_path, index='plot')
     spectra_df = pd.read_csv(csv_path)
 
@@ -89,6 +111,15 @@ def get_spectral_data(csv_path, fb_path):
 
 # --------------------------------------------------
 def get_fieldbook_data(csv_path, index):
+    '''
+    Reads fieldbook file.
+
+    Input:
+        - csv_path: path to CSV file containing the fieldbook information
+        - index: column name for column to be set as index
+    Output: 
+        - fb: Dataframe containing fieldbook data
+    '''
 
     fb = pd.read_csv(csv_path).dropna(subset=['plot'])
     fb['plot'] = pd.to_numeric(fb['plot']).astype(int).astype(str)
@@ -100,6 +131,14 @@ def get_fieldbook_data(csv_path, index):
 
 # --------------------------------------------------
 def fix_plot_column(df):
+    '''
+    Extracts plot number from hyperspectral collection ID (column)
+
+    Input: 
+        - df: dataframe which needs to be fixed
+    Output: 
+        - df: fixed dataframe with plot number
+    '''
 
     plot_number_columns = [column.split('_')[1].replace('00000.asd', '').replace('p', '') for column in df.columns if 'Cotton' in column]
     plot_number_columns.insert(0, 'Lambda')
@@ -111,6 +150,18 @@ def fix_plot_column(df):
 
 # --------------------------------------------------
 def join_dataframes(df1, df2, convert_dtypes=False, groupby_list=None, stat=None):
+    '''
+    Joins two dataframes with options for converting data types and group by.
+
+    Input:
+        - df1: first dataframe with shared index
+        - df2: second dataframe with shared index
+        - convert_dtypes: bool to indicate of converting data types is necessary
+        - groupby_list: list containing column names by which to group by
+        - stat: statistic to use for groupby, either "mean" or "median"
+    Output: 
+        - joined_df: Joined dataframe with selected operations (convert_dtypes and/or groupby_list)
+    '''
 
     joined_df = df1.join(df2).reset_index()
 
@@ -130,6 +181,15 @@ def join_dataframes(df1, df2, convert_dtypes=False, groupby_list=None, stat=None
 
 # --------------------------------------------------
 def get_transcript_list(df, substring):
+    '''
+    Returns a list of transcript names. 
+
+    Input: 
+        - df: Dataframe containing transcript names as columns 
+        - substring: shared substring within transcripts, for example "Gh_"
+    Output: 
+        - transcript_list: list of all transcripts contained within the dataframe
+    '''
 
     transcript_list = [transcript for transcript in df.columns if substring in transcript]
     
@@ -138,6 +198,15 @@ def get_transcript_list(df, substring):
 
 # --------------------------------------------------
 def generate_save_transcript_csv(transcript):
+    '''
+    Generates RNA-Seq merged file for subsequent model training.
+
+    Input: 
+        - transcript: a single transcript name to process
+    Output: 
+        - CSV file saved to disk, within the specified output directory command line argument 
+    '''
+
     args = get_args()
     # Collect response (RNAseq TPM) and explanatory variables (spectra) for a single transcript
     temp_data = rnaseq_spectra.dropna(subset=[transcript])
@@ -165,7 +234,9 @@ def generate_save_transcript_csv(transcript):
 
 # --------------------------------------------------
 def main():
-    """Make a jazz noise here"""
+    """
+    Run the RNA-Seq and Hyperspectral merging here.
+    """
 
     args = get_args()
     # Get RNA-seq data
