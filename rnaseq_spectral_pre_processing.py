@@ -49,6 +49,14 @@ def get_args():
                         metavar='str',
                         type=str,
                         default='2019_cotton_rnaseq_spectra')
+    
+
+    parser.add_argument('-t',
+                        '--treatment',
+                        help='Treatment zones to output.',
+                        metavar='list',
+                        nargs='+',
+                        default=['WW', 'WL'])
 
     return parser.parse_args()
 
@@ -242,11 +250,12 @@ def main():
     # Get RNA-seq data
     rna_fb = get_rnaseq_data(csv_path=args.rnaseq_csv,
                             fb_path=args.fieldbook_csv)
+    
+    rna_fb = rna_fb[rna_fb['treatment'].isin(args.treatment)]
 
     # Get spectral data
     spectra_df, spectra_fb, fb = get_spectral_data(csv_path=args.spectral_csv,
                                 fb_path=args.fieldbook_csv)
-
 
     # Join RNA-seq and spectral data into single dataframe
     global rnaseq_spectra
