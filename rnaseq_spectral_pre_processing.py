@@ -148,7 +148,8 @@ def fix_plot_column(df):
         - df: fixed dataframe with plot number
     '''
 
-    plot_number_columns = [column.split('_')[1].replace('00000.asd', '').replace('p', '') for column in df.columns if 'Cotton' in column]
+    # plot_number_columns = [column.split('_')[1].replace('00000.asd', '').replace('p', '') for column in df.columns if 'Cotton' in column]
+    plot_number_columns = [column.split('_')[1].replace('00000.asd', '').replace('p', '') for column in df.columns if 'Cotton' in column or 'Sorghum' in column]
     plot_number_columns.insert(0, 'Lambda')
 
     df.columns = plot_number_columns
