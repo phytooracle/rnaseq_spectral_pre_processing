@@ -265,6 +265,9 @@ def main():
 
     # Generate and save transcript CSV
     transcript_list = get_transcript_list(df=rnaseq_spectra, substring='Gh_')
+    
+    if not transcript_list:
+        transcript_list = get_transcript_list(df=rnaseq_spectra, substring='Sobic.')
 
     with multiprocessing.Pool(multiprocessing.cpu_count()) as p:
         p.map(generate_save_transcript_csv, transcript_list)
